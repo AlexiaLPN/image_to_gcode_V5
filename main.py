@@ -298,7 +298,7 @@ def generer_gcode(image_bytes, longueur, hauteur, type_bord):
     liste.append(fc.ManualGcode(text='M221 S100'))
     liste.append(fc.ManualGcode(text='M220 S100'))
     liste.append(fc.ManualGcode(text='G28'))
-    configMonstre2mm.plotGcode(liste)
+    return configMonstre2mm.plotGcode(liste)
     return configMonstre2mm.getGcode(liste)
 
 
