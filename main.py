@@ -298,10 +298,9 @@ def generer_gcode(image_bytes, longueur, hauteur, type_bord):
     liste.append(fc.ManualGcode(text='M221 S100'))
     liste.append(fc.ManualGcode(text='M220 S100'))
     liste.append(fc.ManualGcode(text='G28'))
-
+    configMonstre2mm.getGcode(liste)
     return configMonstre2mm.getGcode(liste)
 
-#generer_gcode('peche.jpg', 100,20)
 
 # -------------------- Interface Streamlit -------------------- #
 
@@ -322,9 +321,6 @@ if st.button("Générer et visualiser le GCODE"):
             # Convertir longueur et hauteur en float
             longueur_num = float(longueur)
             hauteur_num = float(hauteur)
-            
-
-
 
             gcode = generer_gcode(image_upload, longueur_num, hauteur_num, type_bord)
 
