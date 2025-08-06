@@ -227,7 +227,7 @@ def generer_gcode(image_bytes, longueur, hauteur, type_bord, type_impression):
 
     Dx = maxX + 20 # Décalage entre 2 pièces sur l'axe x
     Dy = maxY + 20 # Décalage entre 2 pièces sur l'axe y
-    Dz = hauteur + 15 # Décalage entre 2 pièces sur l'axe z
+    Dz = hauteur + 5 # Décalage entre 2 pièces sur l'axe z
     Nx = 0 # Nombre de pièces sur l'axe x
     Ny = 0 # Nombre de pièces sur l'axe y
     Nz = 0 # Nombre de pièces sur l'axe z
@@ -312,7 +312,7 @@ st.set_page_config(page_title="GCODE Images", page_icon="🖨️")
 
 st.title("🖨️ Générateur de GCODE - Tartelettes à la forme de votre image")
 
-image_upload = st.file_uploader("Envoyez une image .jpg (fond blanc, forme noire, sans blanc dans le noir)", type=["jpg", "jpeg"])
+image_upload = st.file_uploader("Envoyez une image .jpg, .jpeg ou .png (fond blanc, forme noire)", type=["jpg", "jpeg","png"])
 longueur = st.text_input("📏 Longueur (=dimension maximale) de la tartelette (mm)", value="100")
 hauteur = st.text_input("📐 Hauteur du bord (mm)", value="20")
 type_bord = st.selectbox("🎨 Type de bord :", ["Bord plein", "Dentelle petites mailles", "Dentelle maille haute"])
