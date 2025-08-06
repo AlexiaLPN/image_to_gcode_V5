@@ -7,7 +7,6 @@ from Configs import configMonstre2mm
 from SequencePoudrage import *
 from motifs_bords import *
 import cv2
-from io import BytesIO
 from fullcontrol.visualize.plot_data import PlotData
 from fullcontrol.visualize.state import State
 from fullcontrol.visualize.controls import PlotControls
@@ -78,64 +77,37 @@ def tartelette_contour_cv(image_cv, longueur, hauteur, pas, pas_bord, e_fond, e_
             bord.extend(fc.move(contour_pts, fc.Vector(z=z)))
             z += pas_bord
 
-    elif type_bord == "Dentelle petites mailles":
+    elif type_bord in ["Dentelle petites mailles", "Dentelle maille haute"]:
 
         l = 0
-        points = []
-        points.append([x_coords[0],y_coords[0]]+[l])
-        for i in range(1,len(x_coords)):
-            x1,y1=x_coords[i-1],y_coords[i-1]
-            x2,y2=x_coords[i],y_coords[i]
-            l += np.sqrt((x2-x1)**2+(y2-y1)**2)
-            points.append([x2,y2]+[l])
+                   
+        points = [[x_coords[0], y_coords[0], l]]
+        for i in range(1, len(x_coords)):
+            x1, y1 = x_coords[i - 1], y_coords[i - 1]
+            x2, y2 = x_coords[i], y_coords[i]
+            l += np.sqrt((x2 - x1)**2 + (y2 - y1)**2)
+            points.append([x2, y2, l])
         perimetre = l
 
-        pointsbis=[]
-        for i in range(len(points)-1):
-            [x1,y1,l1] = points[i]
-            [x2,y2,l2] = points[i+1]
+        pointsbis = []
+        for i in range(len(points) - 1):
+            x1, y1, l1 = points[i]
+            x2, y2, l2 = points[i + 1]
             ds = 0.1
-            n = int((l2-l1)/ds)
+            n = int((l2 - l1) / ds)
             for k in range(n):
-                x = x1 + k*(x2-x1)/n
-                y = y1 + k*(y2-y1)/n
-                l = l1 + np.sqrt((x-x1)**2+(y-y1)**2)
-                pointsbis.append([x,y,l])
-        
-        motif = quadrillage(perimetre,hauteur)
+                x = x1 + k * (x2 - x1) / n
+                y = y1 + k * (y2 - y1) / n
+                l = l1 + np.sqrt((x - x1)**2 + (y - y1)**2)
+                pointsbis.append([x, y, l])                                    
 
-        for element in motif:
-            if type(element).__name__ == 'Point':
-                i = min(int(element.x/perimetre*len(pointsbis)),len(pointsbis)-1)
-                bord.append(fc.Point(x=pointsbis[i][0],y=pointsbis[i][1],z=element.z))
-            else:
-                bord.append(element)
+        motif = (
+                                                 
+            quadrillage(perimetre, hauteur)
 
-    elif type_bord == "Dentelle maille haute":
-
-        l = 0
-        points = []
-        points.append([x_coords[0],y_coords[0]]+[l])
-        for i in range(1,len(x_coords)):
-            x1,y1=x_coords[i-1],y_coords[i-1]
-            x2,y2=x_coords[i],y_coords[i]
-            l += np.sqrt((x2-x1)**2+(y2-y1)**2)
-            points.append([x2,y2]+[l])
-        perimetre = l
-
-        pointsbis=[]
-        for i in range(len(points)-1):
-            [x1,y1,l1] = points[i]
-            [x2,y2,l2] = points[i+1]
-            ds = 0.1
-            n = int((l2-l1)/ds)
-            for k in range(n):
-                x = x1 + k*(x2-x1)/n
-                y = y1 + k*(y2-y1)/n
-                l = l1 + np.sqrt((x-x1)**2+(y-y1)**2)
-                pointsbis.append([x,y,l])
-
-        motif = bosseshautessolides(perimetre,hauteur)
+            if type_bord == "Dentelle petites mailles"
+            else bosseshautessolides(perimetre, hauteur)
+        )
 
         for element in motif:
             if type(element).__name__ == 'Point':
@@ -154,7 +126,7 @@ def tartelette_contour_cv(image_cv, longueur, hauteur, pas, pas_bord, e_fond, e_
         last_fill = remplissage_fond[-1]
         for el in bord:
             if isinstance(el, fc.Point):
-                pointinitialbord = fc.Point(x=el.x, y=el.y, z=el.z)
+                pointinitialbord = el
                 break
         forme.extend(fc.travel_to(fc.Point(x=last_fill.x, y=last_fill.y, z=10)))
         forme.extend(fc.travel_to(fc.Point(x=pointinitialbord.x, y=pointinitialbord.y, z=10)))
@@ -163,6 +135,18 @@ def tartelette_contour_cv(image_cv, longueur, hauteur, pas, pas_bord, e_fond, e_
     forme.append(fc.ManualGcode(text=f'M221 S{e_bord}'))
     forme.append(fc.ManualGcode(text=f'M220 S{v_bord}'))
     forme.extend(bord)
+    # retournement en miroir selon x:
+    
+    for el in forme:
+        if isinstance(el, fc.Point):
+            el.y *= -1                                     
+    minX = min((el.x for el in forme if isinstance(el, fc.Point)), default=0)
+    minY = min((el.y for el in forme if isinstance(el, fc.Point)), default=0)
+    for el in forme:
+        if isinstance(el, fc.Point):
+            el.x += -1 -minX
+            el.y += -30 -minY
+            el.z += 2                         
 
     ### 6. Points de transition ###
     maxX = max((el.x for el in forme if isinstance(el, fc.Point)), default=0)
@@ -171,7 +155,7 @@ def tartelette_contour_cv(image_cv, longueur, hauteur, pas, pas_bord, e_fond, e_
 
     for el in forme:
         if isinstance(el, fc.Point):
-            pointinitial = fc.Point(x=el.x, y=el.y, z=el.z)
+            pointinitial = el
             break
     forme = (
         fc.travel_to(fc.Point(x=pointinitial.x, y=pointinitial.y, z=maxZ + 20))
@@ -188,20 +172,46 @@ def tartelette_contour_cv(image_cv, longueur, hauteur, pas, pas_bord, e_fond, e_
     ### 7. Décalage dans le bac ###
     for el in forme:
         if isinstance(el, fc.Point):
-            el.x += -1 # max du max de - 5 à 235
-            el.y += -30 # max du max de - 30 à 146
-            el.z += 2 # max du max de 1 à 100
+            el.x += -1
+            el.y += -30
+            el.z += 2
 
     return forme, maxX, maxY, maxZ
     
-def generer_gcode(image_bytes, longueur, hauteur, type_bord):
+def generer_gcode(image_bytes, longueur, hauteur, type_bord, type_impression):
     
     pas = 1.5 # pas pour le fond
     pas_bord = 1.5 # pas pour le bord
-    e_fond = 50 # multiplicateur d'extrusion 
-    v_fond = 100 # vitesse d'impression
-    e_bord = 50 # multiplicateur d'extrusion 
-    v_bord = 100 # vitesse d'impression
+    if type_impression == "Poudre blé luxe et appareil sucré luxe":
+        e_fond = 50 # multiplicateur d'extrusion 
+        v_fond = 100 # vitesse d'impression
+        e_bord = 50 # multiplicateur d'extrusion 
+        v_bord = 100 # vitesse d'impression
+    elif type_impression == "Poudre blé luxe et appareil salé":
+        e_fond = 50 # multiplicateur d'extrusion 
+        v_fond = 100 # vitesse d'impression
+        e_bord = 50 # multiplicateur d'extrusion 
+        v_bord = 100 # vitesse d'impression
+    elif type_impression == "Poudre blé luxe et appareil vegan":
+        e_fond = 50 # multiplicateur d'extrusion 
+        v_fond = 100 # vitesse d'impression
+        e_bord = 50 # multiplicateur d'extrusion 
+        v_bord = 100 # vitesse d'impression
+    elif type_impression == "Poudre sans gluten et appareil sans gluten":
+        e_fond = 50 # multiplicateur d'extrusion 
+        v_fond = 100 # vitesse d'impression
+        e_bord = 50 # multiplicateur d'extrusion 
+        v_bord = 100 # vitesse d'impression
+    elif type_impression == "Poudre blé cacao et appareil sucré luxe":
+        e_fond = 50 # multiplicateur d'extrusion 
+        v_fond = 100 # vitesse d'impression
+        e_bord = 50 # multiplicateur d'extrusion 
+        v_bord = 100 # vitesse d'impression
+    elif type_impression == "Poudre de macaron et appareil macaron":
+        e_fond = 50 # multiplicateur d'extrusion 
+        v_fond = 100 # vitesse d'impression
+        e_bord = 50 # multiplicateur d'extrusion 
+        v_bord = 100 # vitesse d'impression                                                                    
     
     liste = []
     liste.append(fc.ManualGcode(text=';PARAMÈTRES UTILISÉS :'))
@@ -314,6 +324,8 @@ image_upload = st.file_uploader("Envoyez une image .jpg (fond blanc, forme noire
 longueur = st.text_area("📏 Longueur (=dimension maximale) de la tartelette (mm)", "100")
 hauteur = st.text_area("📐 Hauteur du bord (mm)", "20")
 type_bord = st.selectbox("🎨 Type de bord :", ["Bord plein", "Dentelle petites mailles", "Dentelle maille haute"])
+type_impression = st.selectbox("🍰 Appareil et poudre utilisés :", ["Poudre blé luxe et appareil sucré luxe", "Poudre blé luxe et appareil salé", "Poudre blé luxe et appareil vegan", "Poudre sans gluten et appareil sans gluten", "Poudre blé cacao et appareil sucré luxe", "Poudre de macaron et appareil macaron"])
+
 
 if st.button("Générer et visualiser le GCODE"):
     if not image_upload or not longueur or not hauteur:
@@ -324,7 +336,7 @@ if st.button("Générer et visualiser le GCODE"):
             longueur_num = float(longueur)
             hauteur_num = float(hauteur)
 
-            gcode, forme = generer_gcode(image_upload, longueur_num, hauteur_num, type_bord)
+            gcode, forme = generer_gcode(image_upload, longueur_num, hauteur_num, type_bord, type_impression)
 
             if gcode == 0:
                 st.warning("Veuillez choisir des dimensions plus petites, la taille maximale est longueur: 236mm, largeur: 176mm, hauteur: 99mm")
