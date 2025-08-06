@@ -313,8 +313,8 @@ st.set_page_config(page_title="GCODE Images", page_icon="🖨️")
 st.title("🖨️ Générateur de GCODE - Tartelettes à la forme de votre image")
 
 image_upload = st.file_uploader("Envoyez une image .jpg (fond blanc, forme noire, sans blanc dans le noir)", type=["jpg", "jpeg"])
-longueur = st.text_area("📏 Longueur (=dimension maximale) de la tartelette (mm)", "100")
-hauteur = st.text_area("📐 Hauteur du bord (mm)", "20")
+longueur = st.text_input("📏 Longueur (=dimension maximale) de la tartelette (mm)", value="100")
+hauteur = st.text_input("📐 Hauteur du bord (mm)", value="20")
 type_bord = st.selectbox("🎨 Type de bord :", ["Bord plein", "Dentelle petites mailles", "Dentelle maille haute"])
 type_impression = st.selectbox("🍰 Appareil et poudre utilisés :", ["Poudre blé luxe et appareil sucré luxe", "Poudre blé luxe et appareil salé", "Poudre blé luxe et appareil vegan", "Poudre sans gluten et appareil sans gluten", "Poudre blé cacao et appareil sucré luxe", "Poudre de macaron et appareil macaron"])
 
