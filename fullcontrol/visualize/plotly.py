@@ -118,4 +118,5 @@ def plot(data: PlotData, controls: PlotControls):
                 scene={axis: dict(showgrid=False, zeroline=False, visible=False)})
     if controls.neat_for_publishing:
         fig.update_layout(width=500, height=500)
-    fig.show()
+    #fig.show()
+    return fig
