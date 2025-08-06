@@ -37,6 +37,9 @@ def tartelette_contour_cv(image_cv, longueur, hauteur, pas, pas_bord, e_fond, e_
     centered_coords = scaled_coords - np.array([min_x, min_y])
     x_coords, y_coords = centered_coords[:, 0], centered_coords[:, 1]
 
+    max_x = np.max(x_coords)
+    x_coords = max_x - x_coords
+
     ### 2. Matrice binaire alignée avec le contour ###
     t_matrice_x = round(longueur / pas * 3)
     t_matrice_y = round(longueur / pas * 3)
@@ -135,18 +138,15 @@ def tartelette_contour_cv(image_cv, longueur, hauteur, pas, pas_bord, e_fond, e_
     forme.append(fc.ManualGcode(text=f'M221 S{e_bord}'))
     forme.append(fc.ManualGcode(text=f'M220 S{v_bord}'))
     forme.extend(bord)
-    # retournement en miroir selon x:
+    """# retournement en miroir selon x:
     
     for el in forme:
         if isinstance(el, fc.Point):
             el.y *= -1                                     
-    minX = min((el.x for el in forme if isinstance(el, fc.Point)), default=0)
     minY = min((el.y for el in forme if isinstance(el, fc.Point)), default=0)
     for el in forme:
         if isinstance(el, fc.Point):
-            el.x += -1 -minX
-            el.y += -30 -minY
-            el.z += 2                         
+            el.y -= minY   """                    
 
     ### 6. Points de transition ###
     maxX = max((el.x for el in forme if isinstance(el, fc.Point)), default=0)
