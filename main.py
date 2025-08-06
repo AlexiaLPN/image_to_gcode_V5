@@ -224,9 +224,17 @@ def generer_gcode(image_bytes, longueur, hauteur, type_bord, type_impression):
     # Appeler la fonction principale avec cette image OpenCV directement
     forme, maxX, maxY, maxZ = tartelette_contour_cv(image_cv, longueur, hauteur, pas, pas_bord, e_fond, e_bord, v_fond, v_bord, type_bord)
 
-
-    Dx = maxX + 20 # Décalage entre 2 pièces sur l'axe x
-    Dy = maxY + 20 # Décalage entre 2 pièces sur l'axe y
+    if maxZ <= 28:
+        Dx = maxX + 20 # Décalage entre 2 pièces sur l'axe x
+        Dy = maxY + 20 # Décalage entre 2 pièces sur l'axe y
+    elif maxZ <= 50:
+        Dx = maxX + 30 # Décalage entre 2 pièces sur l'axe x
+        Dy = maxY + 30 # Décalage entre 2 pièces sur l'axe y
+    else:
+        Dx = maxX + 40 # Décalage entre 2 pièces sur l'axe x
+        Dy = maxY + 40 # Décalage entre 2 pièces sur l'axe y
+    
+    
     Dz = hauteur + 5 # Décalage entre 2 pièces sur l'axe z
     Nx = 0 # Nombre de pièces sur l'axe x
     Ny = 0 # Nombre de pièces sur l'axe y

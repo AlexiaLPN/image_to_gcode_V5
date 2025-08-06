@@ -59,30 +59,8 @@ def plot(data: PlotData, controls: PlotControls):
             any_mesh_plots = True
             max_width = max(max_width, local_max)
         elif not controls.hide_travel or path.extruder.on:
-            if path.extruder.on:
-                # extrusion normale
-                fig.add_trace(go.Scatter3d(
-                    mode='lines',
-                    x=path.xvals,
-                    y=path.yvals,
-                    z=path.zvals,
-                    showlegend=False,
-                    line=dict(width=linewidth_now, color=colors_now)
-                ))
-            else:
-                # déplacement (travel) : pointillés fins gris clair
-                fig.add_trace(go.Scatter3d(
-                    mode='lines',
-                    x=path.xvals,
-                    y=path.yvals,
-                    z=path.zvals,
-                    showlegend=False,
-                    line=dict(
-                        width=0.5,
-                        color='rgba(180,180,180,0.2)',  # très discret
-                        dash='dot'
-                    )
-                ))
+            fig.add_trace(go.Scatter3d(mode='lines', x=path.xvals, y=path.yvals, z=path.zvals,
+                                       showlegend=False, line=dict(width=linewidth_now, color=colors_now)))
 
     # find a bounding box, to create a plot with equally proportioned X Y Z scales (so a cuboid looks like a cuboid, not a cube)
     bounding_box_size = max(data.bounding_box.maxx-data.bounding_box.minx, data.bounding_box.maxy -
