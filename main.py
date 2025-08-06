@@ -303,7 +303,7 @@ def generer_gcode(image_bytes, longueur, hauteur, type_bord, type_impression):
     liste.append(fc.ManualGcode(text='M221 S100'))
     liste.append(fc.ManualGcode(text='M220 S100'))
     liste.append(fc.ManualGcode(text='G28'))
-    return configMonstre2mm.getGcode(liste), etage
+    return configMonstre2mm.getGcode(liste), liste
 
 
 # -------------------- Interface Streamlit -------------------- #
