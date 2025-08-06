@@ -7,8 +7,11 @@ from Configs import configMonstre2mm
 from SequencePoudrage import *
 from motifs_bords import *
 import cv2
-import os
 from io import BytesIO
+from fullcontrol.visualize.plot_data import PlotData
+from fullcontrol.visualize.state import State
+from fullcontrol.visualize.controls import PlotControls
+from fullcontrol.visualize.plotly import plot
 
 # Motifs bords:
 
@@ -298,8 +301,7 @@ def generer_gcode(image_bytes, longueur, hauteur, type_bord):
     liste.append(fc.ManualGcode(text='M221 S100'))
     liste.append(fc.ManualGcode(text='M220 S100'))
     liste.append(fc.ManualGcode(text='G28'))
-    return configMonstre2mm.plotGcode(liste)
-    return configMonstre2mm.getGcode(liste)
+    return configMonstre2mm.getGcode(liste), forme
 
 
 # -------------------- Interface Streamlit -------------------- #
@@ -322,7 +324,7 @@ if st.button("Générer et visualiser le GCODE"):
             longueur_num = float(longueur)
             hauteur_num = float(hauteur)
 
-            gcode = generer_gcode(image_upload, longueur_num, hauteur_num, type_bord)
+            gcode, forme = generer_gcode(image_upload, longueur_num, hauteur_num, type_bord)
 
             if gcode == 0:
                 st.warning("Veuillez choisir des dimensions plus petites, la taille maximale est longueur: 236mm, largeur: 176mm, hauteur: 99mm")
@@ -330,6 +332,18 @@ if st.button("Générer et visualiser le GCODE"):
             else :
 
                 st.success("✅ GCODE généré avec succès !")
+
+                steps = [el for el in forme if isinstance(el, fc.Point)]
+                plot_controls = PlotControls(style="line", color_type="print_sequence")
+                state = State(steps, plot_controls)
+                plot_data = PlotData(steps, state)
+
+                for step in steps:
+                    step.visualize(state, plot_data, plot_controls)
+                plot_data.cleanup()
+
+                fig = plot(plot_data, plot_controls)
+                st.plotly_chart(fig, use_container_width=True)
 
                 st.download_button("💾 Télécharger le GCODE", gcode, file_name="Tartelette.gcode")
 

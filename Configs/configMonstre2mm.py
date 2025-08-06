@@ -71,7 +71,6 @@ def getGcode(steps):
 def plotGcode(steps, output_file="visualisation.html"):
     gcode_controls, starting_procedure_steps, ending_procedure_steps = getInit()
     steps = starting_procedure_steps + steps + ending_procedure_steps
-    """html = fc.transform(steps, 'html', gcode_controls)
+    html = fc.transform(steps, 'html', gcode_controls)
     with open(output_file, "w") as f:
-        f.write(html)"""
-    return fc.transform(steps, 'html', gcode_controls)
+        f.write(html)
