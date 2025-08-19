@@ -309,5 +309,8 @@ G0 F2000 Z""" +str(Z)+ """
 G1 Z""" + str(Z+10) + poudrageB + """
 G0 F2000 Z""" +str(Z)+ """
 """ + homogeneisation
+
+    else:
+        gCode_poudrage_z = """"""
         
     return gCode_poudrage_z
