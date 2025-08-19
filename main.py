@@ -305,7 +305,7 @@ def generer_gcode(image_bytes, longueur, hauteur, type_bord, type_impression):
     for i in range(Nz):
         Z = i*Dz + 1
         if i!=0:
-            liste.append(fc.ManualGcode(text=poudrage_z(Z)))
+            liste.append(fc.ManualGcode(text=poudrage_z(Z,Nz,i)))
         liste.extend(fc.move(etage,fc.Vector(z=Z),False))
 
     liste.append(fc.ManualGcode(text='M221 S100'))
