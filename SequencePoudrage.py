@@ -220,14 +220,16 @@ def poudrage_z(Z,nombre_etages:int,numero_etage:int):
     """
     # Poudrage A : G1 U1000 V1575 W125 A2300 F3000
     # Poudrage B : G1 U800 V1187.5 W82.5 A1650 F3000
-    # Poudrage C : G1 U1800 V2762.5 W207.5 A3950 F3000 (= A + B)
-    # pour 2 étages de pièces : 1 - C - 2
+    # Poudrage A + B : G1 U1800 V2762.5 W207.5 A3950 F3000 (= A + B)
+    # pour 2 étages de pièces : 1 - A+B - 2
     # pour 3 étages de pièces : 1 - A - 2 - B - 3
     # pour 4 étages de pièces : 1 2 - A - 3 - B - 4
     # pour 5 étages de pièces : 1 2 - A - 3 - B - 4 5
     # pour 6 étages de pièces : 1 2 - A - 3 4 - B - 5 6
     # pour 7 étages de pièces : 1 2 3 - A - 4 5 - B - 6 7
     
+    gCode_poudrage_z = """; Pas de poudrage à cet étage"""
+
     if nombre_etages == 2 and numero_etage == 1:
         gCode_poudrage_z = """
 ;-------Move head up
@@ -310,7 +312,4 @@ G1 Z""" + str(Z+10) + poudrageB + """
 G0 F2000 Z""" +str(Z)+ """
 """ + homogeneisation
 
-    else:
-        gCode_poudrage_z = """"""
-        
     return gCode_poudrage_z
