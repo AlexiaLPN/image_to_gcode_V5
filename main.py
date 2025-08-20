@@ -323,7 +323,7 @@ st.markdown(
     """
     <div style="display: flex; align-items: center;">
         <a href="https://www.lapatisserienumerique.com" target="_blank">
-            <img src="https://www.google.com/url?sa=i&url=https%3A%2F%2Flapatisserienumerique.com%2F%3Fsrsltid%3DAfmBOoqI5patY8KiMdu8ZkCSdpY44PKyu8puFXfiD06RTcmptwaK4FyL&psig=AOvVaw0vsvIqgXtNh2YPq0efeyx6&ust=1755758002733000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCMC2y7bimI8DFQAAAAAdAAAAABAE" alt="Logo" style="height:60px;">
+            <img src="https://lapatisserienumerique.com/cdn/shop/files/Logo_PatisserieNumerique_WEB_360x.png?v=1708711426" alt="Logo" style="height:60px;">
         </a>
     </div>
     """,
@@ -381,7 +381,7 @@ if st.button("Générer et visualiser le GCODE"):
                 # Texte sous le bouton avec lien vers blog
                 st.markdown(
                     """
-                    <p style="margin-top:15px;">
+                    <p style="margin-top:15px; text-align: center;">
                         Pour retrouver des exemples et le fonctionnement en détail, vous pouvez lire cet 
                         <a href="https://lapatisserienumerique.com/blogs/news/de-l-image-jpg-au-biscuit-creez-des-fonds-de-tarte-sans-moule-impression-3d" target="_blank">article</a> 
                         sur notre blog.
@@ -394,7 +394,7 @@ if st.button("Générer et visualiser le GCODE"):
                 st.markdown(
                     """
                     <hr>
-                    <p style="font-size:12px; color:gray;">
+                    <p style="font-size:12px; color:gray; text-align: center;">
                         Ce service vous est proposé par notre la Pâtisserie Numérique, tous droits réservés.<br>
                         Pour consulter nos CGU et CGV rendez-vous sur notre site 
                         <a href="https://www.lapatisserienumerique.com" target="_blank">www.lapatisserienumerique.com</a>
