@@ -378,22 +378,22 @@ if st.button("Générer et visualiser le GCODE"):
                 # Bouton téléchargement
                 st.download_button("💾 Télécharger le GCODE", gcode, file_name="Tartelette.gcode")
 
-                # Texte sous le bouton avec lien vers blog
-                st.markdown(
-                    """
-                    <p style="margin-top:15px; text-align: center;">
-                        Pour retrouver des exemples et le fonctionnement en détail, vous pouvez lire cet 
-                        <a href="https://lapatisserienumerique.com/blogs/news/de-l-image-jpg-au-biscuit-creez-des-fonds-de-tarte-sans-moule-impression-3d" target="_blank">article</a> 
-                        sur notre blog.
-                    </p>
-                    """,
-                    unsafe_allow_html=True
-                )
-
         except Exception as e:
             st.error(f"Erreur lors de la génération : {e}")
 
 
+# Texte sous le bouton avec lien vers blog
+st.markdown(
+    """
+    <p style="margin-top:15px; text-align: center;">
+        Pour retrouver des exemples et le fonctionnement en détail, vous pouvez lire cet 
+        <a href="https://lapatisserienumerique.com/blogs/news/de-l-image-jpg-au-biscuit-creez-des-fonds-de-tarte-sans-moule-impression-3d" target="_blank">article</a> 
+        sur notre blog.
+    </p>
+    """,
+    unsafe_allow_html=True
+)
+            
 # --- Mentions légales (toujours affichées en bas) ---
 st.markdown(
     """
