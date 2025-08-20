@@ -316,17 +316,18 @@ def generer_gcode(image_bytes, longueur, hauteur, type_bord, type_impression):
 
 # -------------------- Interface Streamlit -------------------- #
 
-st.set_page_config(page_title="GCODE Images", page_icon="🖨️")
+# --- Forcer Streamlit en pleine largeur ---
+st.set_page_config(page_title="GCODE Images", page_icon="🖨️", layout="wide")
 
-# --- Logo fixé à gauche de la page ---
+# --- Logo vraiment à gauche ---
 st.markdown(
     """
     <style>
         .logo-container {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            z-index: 100;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            margin-bottom: 20px;
         }
     </style>
     <div class="logo-container">
