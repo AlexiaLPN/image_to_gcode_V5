@@ -318,13 +318,32 @@ def generer_gcode(image_bytes, longueur, hauteur, type_bord, type_impression):
 
 st.set_page_config(page_title="GCODE Images", page_icon="🖨️")
 
+# --- Logo + lien vers site ---
+st.markdown(
+    """
+    <div style="display: flex; align-items: center;">
+        <a href="https://www.lapatisserienumerique.com" target="_blank">
+            <img src="https://www.google.com/url?sa=i&url=https%3A%2F%2Flapatisserienumerique.com%2F%3Fsrsltid%3DAfmBOoqI5patY8KiMdu8ZkCSdpY44PKyu8puFXfiD06RTcmptwaK4FyL&psig=AOvVaw0vsvIqgXtNh2YPq0efeyx6&ust=1755758002733000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCMC2y7bimI8DFQAAAAAdAAAAABAE" alt="Logo" style="height:60px;">
+        </a>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+
 st.title("🖨️ Générateur de GCODE - Tartelettes à la forme de votre image")
 
 image_upload = st.file_uploader("Envoyez une image .jpg, .jpeg ou .png (fond blanc, forme noire)", type=["jpg", "jpeg","png"])
 longueur = st.text_input("📏 Longueur (=dimension maximale) de la tartelette (mm)", value="100")
 hauteur = st.text_input("📐 Hauteur du bord (mm)", value="20")
 type_bord = st.selectbox("🎨 Type de bord :", ["Bord plein", "Dentelle petites mailles", "Dentelle maille haute"])
-type_impression = st.selectbox("🍰 Appareil et poudre utilisés :", ["Poudre blé luxe et appareil sucré luxe", "Poudre blé luxe et appareil salé", "Poudre blé luxe et appareil vegan", "Poudre sans gluten et appareil sans gluten", "Poudre blé cacao et appareil sucré luxe", "Poudre de macaron et appareil macaron"])
+type_impression = st.selectbox("🍰 Appareil et poudre utilisés :", [
+    "Poudre blé luxe et appareil sucré luxe",
+    "Poudre blé luxe et appareil salé",
+    "Poudre blé luxe et appareil vegan",
+    "Poudre sans gluten et appareil sans gluten",
+    "Poudre blé cacao et appareil sucré luxe",
+    "Poudre de macaron et appareil macaron"
+])
 
 
 if st.button("Générer et visualiser le GCODE"):
@@ -342,7 +361,6 @@ if st.button("Générer et visualiser le GCODE"):
                 st.warning("Veuillez choisir des dimensions plus petites, la taille maximale est longueur: 236mm, largeur: 176mm, hauteur: 99mm")
             
             else :
-
                 st.success("✅ GCODE généré avec succès !")
 
                 steps = [el for el in forme if isinstance(el, fc.Point)]
@@ -357,7 +375,33 @@ if st.button("Générer et visualiser le GCODE"):
                 fig = plot(plot_data, plot_controls)
                 st.plotly_chart(fig, use_container_width=True)
 
+                # Bouton téléchargement
                 st.download_button("💾 Télécharger le GCODE", gcode, file_name="Tartelette.gcode")
+
+                # Texte sous le bouton avec lien vers blog
+                st.markdown(
+                    """
+                    <p style="margin-top:15px;">
+                        Pour retrouver des exemples et le fonctionnement en détail, vous pouvez lire cet 
+                        <a href="https://lapatisserienumerique.com/blogs/news/de-l-image-jpg-au-biscuit-creez-des-fonds-de-tarte-sans-moule-impression-3d" target="_blank">article</a> 
+                        sur notre blog.
+                    </p>
+                    """,
+                    unsafe_allow_html=True
+                )
+
+                # Mentions légales
+                st.markdown(
+                    """
+                    <hr>
+                    <p style="font-size:12px; color:gray;">
+                        Ce service vous est proposé par notre la Pâtisserie Numérique, tous droits réservés.<br>
+                        Pour consulter nos CGU et CGV rendez-vous sur notre site 
+                        <a href="https://www.lapatisserienumerique.com" target="_blank">www.lapatisserienumerique.com</a>
+                    </p>
+                    """,
+                    unsafe_allow_html=True
+                )
 
         except Exception as e:
             st.error(f"Erreur lors de la génération : {e}")
