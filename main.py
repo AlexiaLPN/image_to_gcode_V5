@@ -324,7 +324,7 @@ st.markdown(
     <style>
         .logo-container {
             position: fixed;
-            top: 70px;
+            top: 50px;
             left: 20px;
             z-index: 100;
         }
