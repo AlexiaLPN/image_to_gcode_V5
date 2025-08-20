@@ -323,7 +323,7 @@ st.markdown(
     """
     <div style="display: flex; align-items: center;">
         <a href="https://www.lapatisserienumerique.com" target="_blank">
-            <img src="https://lapatisserienumerique.com/cdn/shop/files/Logo_PatisserieNumerique_WEB_360x.png?v=1708711426" alt="Logo" style="height:60px;">
+            <img src="https://lapatisserienumerique.com/cdn/shop/files/Logo_PatisserieNumerique_WEB_360x.png?v=1708711426" alt="Logo" style="height:100px;">
         </a>
     </div>
     """,
@@ -360,7 +360,7 @@ if st.button("Générer et visualiser le GCODE"):
             if gcode == 0:
                 st.warning("Veuillez choisir des dimensions plus petites, la taille maximale est longueur: 236mm, largeur: 176mm, hauteur: 99mm")
             
-            else :
+            else:
                 st.success("✅ GCODE généré avec succès !")
 
                 steps = [el for el in forme if isinstance(el, fc.Point)]
@@ -390,18 +390,19 @@ if st.button("Générer et visualiser le GCODE"):
                     unsafe_allow_html=True
                 )
 
-                # Mentions légales
-                st.markdown(
-                    """
-                    <hr>
-                    <p style="font-size:12px; color:gray; text-align: center;">
-                        Ce service vous est proposé par notre la Pâtisserie Numérique, tous droits réservés.<br>
-                        Pour consulter nos CGU et CGV rendez-vous sur notre site 
-                        <a href="https://www.lapatisserienumerique.com" target="_blank">www.lapatisserienumerique.com</a>
-                    </p>
-                    """,
-                    unsafe_allow_html=True
-                )
-
         except Exception as e:
             st.error(f"Erreur lors de la génération : {e}")
+
+
+# --- Mentions légales (toujours affichées en bas) ---
+st.markdown(
+    """
+    <hr>
+    <p style="font-size:12px; color:gray; text-align: center;">
+        Ce service vous est proposé par la Pâtisserie Numérique, tous droits réservés.<br>
+        Pour consulter nos CGU et CGV rendez-vous sur notre site 
+        <a href="https://www.lapatisserienumerique.com" target="_blank">www.lapatisserienumerique.com</a>
+    </p>
+    """,
+    unsafe_allow_html=True
+)
