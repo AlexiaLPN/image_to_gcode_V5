@@ -318,12 +318,21 @@ def generer_gcode(image_bytes, longueur, hauteur, type_bord, type_impression):
 
 st.set_page_config(page_title="GCODE Images", page_icon="🖨️")
 
-# --- Logo + lien vers site ---
+# --- Logo fixé à gauche de la page ---
 st.markdown(
     """
-    <div style="display: flex; align-items: center;">
+    <style>
+        .logo-container {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 100;
+        }
+    </style>
+    <div class="logo-container">
         <a href="https://www.lapatisserienumerique.com" target="_blank">
-            <img src="https://lapatisserienumerique.com/cdn/shop/files/Logo_PatisserieNumerique_WEB_360x.png?v=1708711426" alt="Logo" style="height:100px;">
+            <img src="https://lapatisserienumerique.com/cdn/shop/files/Logo_PatisserieNumerique_WEB_360x.png?v=1708711426" 
+                 alt="Logo" style="height:100px;">
         </a>
     </div>
     """,
