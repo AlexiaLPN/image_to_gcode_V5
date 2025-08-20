@@ -340,7 +340,14 @@ st.markdown(
 )
 
 # --- Le reste reste centré comme avant ---
-st.title("🖨️ Générateur de GCODE - Tartelettes à la forme de votre image")
+st.markdown(
+    """
+    <h1 style="text-align: center;">
+        🖨️ Générateur de GCODE - Tartelettes à la forme de votre image
+    </h1>
+    """,
+    unsafe_allow_html=True
+)
 
 image_upload = st.file_uploader("Envoyez une image .jpg, .jpeg ou .png (fond blanc, forme noire)", type=["jpg", "jpeg","png"])
 longueur = st.text_input("📏 Longueur (=dimension maximale) de la tartelette (mm)", value="100")
