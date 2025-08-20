@@ -14,7 +14,7 @@ def set_up(user_overrides: dict):
 
     starting_procedure_steps = []
     starting_procedure_steps.append(ManualGcode(
-        text='; Time to print!!!!!\n; GCode created with FullControl - tell us what you\'re printing!\n; info@fullcontrol.xyz or tag FullControlXYZ on Twitter/Instagram/LinkedIn/Reddit/TikTok'))
+        text='; GCode créé par La Patisserie Numerique - Montrez nous ce que vous imprimez !\n; https://lapatisserienumerique.com/ ou taguez lapatisserienumerique sur Instagram/LinkedIn/Facebook/Tiktok \n'))
     if 'relative_e' in user_overrides.keys():
         starting_procedure_steps.append(Extruder(relative_gcode=initialization_data["relative_e"]))
     if 'bed_temp' in user_overrides.keys():

@@ -17,7 +17,7 @@ def set_up(user_overrides: dict):
         text='\n;FLAVOR:Marlin\n;TIME:0\n;Filament used: 0m\n;Layer height: 0\n;MINX:0\n;MINY:0\n;MINZ:0'))
     starting_procedure_steps.append(ManualGcode(text=';MAXX:220\n;MAXY:220\n;MAXZ:250\n'))
     starting_procedure_steps.append(ManualGcode(
-        text='; Time to print!!!!!\n; GCode created with FullControl - tell us what you\'re printing!\n; info@fullcontrol.xyz or tag FullControlXYZ on Twitter/Instagram/LinkedIn/Reddit/TikTok \n'))
+        text='; GCode créé par La Patisserie Numerique - Montrez nous ce que vous imprimez !\n; https://lapatisserienumerique.com/ ou taguez lapatisserienumerique sur Instagram/LinkedIn/Facebook/Tiktok \n'))
     starting_procedure_steps.append(PrinterCommand(id='home'))
     starting_procedure_steps.append(Buildplate(temp=initialization_data["bed_temp"], wait=False))
     starting_procedure_steps.append(ManualGcode(text='M105'))
