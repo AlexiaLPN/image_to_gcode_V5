@@ -316,23 +316,22 @@ def generer_gcode(image_bytes, longueur, hauteur, type_bord, type_impression):
 
 # -------------------- Interface Streamlit -------------------- #
 
-# --- Forcer Streamlit en pleine largeur ---
-st.set_page_config(page_title="GCODE Images", page_icon="🖨️", layout="wide")
+st.set_page_config(page_title="GCODE Images", page_icon="🖨️", layout="centered")
 
-# --- Logo vraiment à gauche ---
+# --- Logo fixé tout à gauche ---
 st.markdown(
     """
     <style>
         .logo-container {
-            display: flex;
-            justify-content: flex-start;
-            align-items: center;
-            margin-bottom: 20px;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 100;
         }
     </style>
     <div class="logo-container">
         <a href="https://www.lapatisserienumerique.com" target="_blank">
-            <img src="https://lapatisserienumerique.com/cdn/shop/files/Logo_PatisserieNumerique_WEB_360x.png?v=1708711426" 
+            <img src="https://lapatisserienumerique.com/cdn/shop/files/Logo_PatisserieNumerique_WEB_360x.png?v=1708711426"
                  alt="Logo" style="height:100px;">
         </a>
     </div>
@@ -340,6 +339,7 @@ st.markdown(
     unsafe_allow_html=True
 )
 
+# --- Le reste reste centré comme avant ---
 st.title("🖨️ Générateur de GCODE - Tartelettes à la forme de votre image")
 
 image_upload = st.file_uploader("Envoyez une image .jpg, .jpeg ou .png (fond blanc, forme noire)", type=["jpg", "jpeg","png"])
