@@ -171,7 +171,6 @@ def tartelette_contour_cv(image_cv, longueur, hauteur, pas, pas_bord, e_fond, e_
     return forme, maxX, maxY, maxZ
     
 def generer_gcode(image_bytes, longueur, hauteur, type_bord, type_impression):
-    
     pas = 1.5 # pas pour le fond
     pas_bord = 1.5 # pas pour le bord
     if type_impression == "Poudre blé luxe et appareil sucré luxe":
@@ -179,31 +178,43 @@ def generer_gcode(image_bytes, longueur, hauteur, type_bord, type_impression):
         v_fond = 100 # vitesse d'impression
         e_bord = 50 # multiplicateur d'extrusion 
         v_bord = 100 # vitesse d'impression
+        poudre = 'BL'
+        appareil = 'SUC'
     elif type_impression == "Poudre blé luxe et appareil salé":
         e_fond = 50 # multiplicateur d'extrusion 
         v_fond = 100 # vitesse d'impression
         e_bord = 50 # multiplicateur d'extrusion 
         v_bord = 100 # vitesse d'impression
+        poudre = 'BL'
+        appareil = 'SAL'
     elif type_impression == "Poudre blé luxe et appareil vegan":
         e_fond = 50 # multiplicateur d'extrusion 
         v_fond = 100 # vitesse d'impression
         e_bord = 50 # multiplicateur d'extrusion 
         v_bord = 100 # vitesse d'impression
+        poudre = 'BL'
+        appareil = 'VGA'
     elif type_impression == "Poudre sans gluten et appareil sans gluten":
         e_fond = 50 # multiplicateur d'extrusion 
         v_fond = 100 # vitesse d'impression
         e_bord = 50 # multiplicateur d'extrusion 
         v_bord = 100 # vitesse d'impression
+        poudre = 'SG'
+        appareil = 'SGU'
     elif type_impression == "Poudre blé cacao et appareil sucré luxe":
         e_fond = 50 # multiplicateur d'extrusion 
         v_fond = 100 # vitesse d'impression
         e_bord = 50 # multiplicateur d'extrusion 
         v_bord = 100 # vitesse d'impression
+        poudre = 'BC'
+        appareil = 'SUC'
     elif type_impression == "Poudre de macaron et appareil macaron":
         e_fond = 50 # multiplicateur d'extrusion 
         v_fond = 100 # vitesse d'impression
         e_bord = 50 # multiplicateur d'extrusion 
-        v_bord = 100 # vitesse d'impression                                                                    
+        v_bord = 100 # vitesse d'impression
+        poudre = 'MA'
+        appareil = 'MER'                                                               
     
     liste = []
     liste.append(fc.ManualGcode(text=';PARAMÈTRES UTILISÉS :'))
@@ -311,7 +322,7 @@ def generer_gcode(image_bytes, longueur, hauteur, type_bord, type_impression):
     liste.append(fc.ManualGcode(text='M221 S100'))
     liste.append(fc.ManualGcode(text='M220 S100'))
     liste.append(fc.ManualGcode(text='G28'))
-    return configMonstre2mm.getGcode(liste), liste
+    return configMonstre2mm.getGcode(liste), liste, Nx*Ny*Nz, poudre, appareil
 
 
 # -------------------- Interface Streamlit -------------------- #
@@ -372,7 +383,7 @@ if st.button("Générer et visualiser le GCODE"):
             longueur_num = float(longueur)
             hauteur_num = float(hauteur)
 
-            gcode, forme = generer_gcode(image_upload, longueur_num, hauteur_num, type_bord, type_impression)
+            gcode, forme, nombre_de_pieces, poudre, appareil = generer_gcode(image_upload, longueur_num, hauteur_num, type_bord, type_impression)
 
             if gcode == 0:
                 st.warning("Veuillez choisir des dimensions plus petites, la taille maximale est longueur: 236mm, largeur: 176mm, hauteur: 99mm")
@@ -392,8 +403,10 @@ if st.button("Générer et visualiser le GCODE"):
                 fig = plot(plot_data, plot_controls)
                 st.plotly_chart(fig, use_container_width=True)
 
+                output_file = f"TARTE-{poudre}-{appareil}-C12-T2-H15B12-{nombre_de_pieces}.gcode"
+
                 # Bouton téléchargement
-                st.download_button("💾 Télécharger le GCODE", gcode, file_name="Tartelette.gcode")
+                st.download_button("💾 Télécharger le GCODE", gcode, file_name=output_file)
 
         except Exception as e:
             st.error(f"Erreur lors de la génération : {e}")
