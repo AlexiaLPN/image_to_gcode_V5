@@ -70,6 +70,9 @@ def tartelette_contour_cv(image_cv, longueur, hauteur, pas, pas_bord, e_fond, e_
                 dehors = False
             else:
                 dehors = True
+    remplissage_fond.append(fc.ManualGcode(text=f'M221 S20'))
+    remplissage_fond.extend([fc.Point(x=x, y=y, z=0) for x, y in zip(x_coords, y_coords)])
+    remplissage_fond.append(fc.ManualGcode(text=f'M221 S{e_fond}'))
     
     ### 4. Bord vertical ###
     contour_pts = [fc.Point(x=x, y=y, z=0) for x, y in zip(x_coords, y_coords)]
@@ -77,6 +80,7 @@ def tartelette_contour_cv(image_cv, longueur, hauteur, pas, pas_bord, e_fond, e_
     z = 0
 
     if type_bord == "Bord plein":
+        z = pas_bord
         while z <= hauteur:
             bord.extend(fc.move(contour_pts, fc.Vector(z=z)))
             z += pas_bord
