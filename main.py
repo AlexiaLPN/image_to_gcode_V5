@@ -131,7 +131,7 @@ def tartelette_contour_cv(image_cv, longueur, hauteur, pas, pas_bord, e_fond, e_
     forme.extend(remplissage_fond)
 
     if remplissage_fond:
-        last_fill = remplissage_fond[-1]
+        last_fill = remplissage_fond[-2]
         for el in bord:
             if isinstance(el, fc.Point):
                 pointinitialbord = el
