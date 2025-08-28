@@ -170,7 +170,7 @@ def tartelette_contour_cv(image_cv, longueur, hauteur, pas, pas_bord, e_fond, e_
         if isinstance(el, fc.Point):
             el.x += -1
             el.y += -30
-            el.z += 2
+            el.z += 0
 
     return forme, maxX, maxY, maxZ
     
