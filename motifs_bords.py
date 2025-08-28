@@ -27,6 +27,12 @@ def quadrillage(perimetre: float, hauteur: float):
             motif.extend(fc.travel_to(fc.Point(x=a*N,y=0,z=a*(h+1)+10)))
             motif.extend(fc.travel_to(fc.Point(x=0,y=0,z=a*(h+1)+10)))
             motif.extend(fc.travel_to(fc.Point(x=0,y=0,z=a*(h+1))))
+    
+    maxZ = max([element.z for element in motif if type(element).__name__ == 'Point'])
+
+    for element in  motif:
+        if  type(element).__name__ == 'Point':
+            element.z *= hauteur/maxZ
 
     return motif
 
@@ -72,5 +78,11 @@ def bosseshautessolides(perimetre: float, hauteur: float):
         if  type(element).__name__ == 'Point':
             element.z = etirement*element.y
             element.y = 0
+
+    maxZ = max([element.z for element in motif if type(element).__name__ == 'Point'])
+
+    for element in  motif:
+        if  type(element).__name__ == 'Point':
+            element.z *= hauteur/maxZ
     
     return motif
