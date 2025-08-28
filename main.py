@@ -325,7 +325,15 @@ def generer_gcode(image_bytes, longueur, hauteur, type_bord, type_impression):
 
     liste.append(fc.ManualGcode(text='M221 S100'))
     liste.append(fc.ManualGcode(text='M220 S100'))
-    liste.append(fc.ManualGcode(text='G28'))
+    liste.append(fc.ManualGcode(text='M400'))
+    liste.append(fc.ManualGcode(text='M42 P3 S0'))
+    liste.append(fc.ManualGcode(text='M42 P5 S0'))
+    liste.append(fc.ManualGcode(text='G1 Z155'))
+    liste.append(fc.ManualGcode(text='G1 Y-10 F5000'))
+    liste.append(fc.ManualGcode(text='G1 X380 F5000'))
+    liste.append(fc.ManualGcode(text='G0 Z100 F8000'))
+    
+    
     return configMonstre2mm.getGcode(liste), liste, Nx*Ny*Nz, poudre, appareil
 
 
