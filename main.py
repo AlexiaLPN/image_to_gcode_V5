@@ -42,8 +42,8 @@ def tartelette_contour_cv(image_cv, longueur, hauteur, pas, pas_bord, e_fond, e_
     y_coords = max_y - y_coords
 
     ### 2. Matrice binaire alignée avec le contour ###
-    t_matrice_x = round(longueur / pas * 3)
-    t_matrice_y = round(longueur / pas * 3)
+    t_matrice_x = round(longueur / pas * 1) #(longueur / pas * 3)
+    t_matrice_y = round(longueur / pas * 1) #(longueur / pas * 3)
 
     xs = np.linspace(x_coords.min(), x_coords.max(), t_matrice_x)
     ys = np.linspace(y_coords.min(), y_coords.max(), t_matrice_y)
@@ -57,7 +57,7 @@ def tartelette_contour_cv(image_cv, longueur, hauteur, pas, pas_bord, e_fond, e_
 
     ### 3. Remplissage fond (lignes verticales) ###
     remplissage_fond = []
-    for j in range(0, t_matrice_x, 3):
+    for j in range(0, t_matrice_x, 1): # (0, t_matrice_x, 3)
         colonne = range(t_matrice_y) if j % 2 == 0 else range(t_matrice_y - 1, -1, -1)
         dehors = True
         for i in colonne:
@@ -170,7 +170,7 @@ def tartelette_contour_cv(image_cv, longueur, hauteur, pas, pas_bord, e_fond, e_
         if isinstance(el, fc.Point):
             el.x += -1
             el.y += -30
-            el.z += 0
+            el.z += 1
 
     return forme, maxX, maxY, maxZ
     
@@ -318,9 +318,9 @@ def generer_gcode(image_bytes, longueur, hauteur, type_bord, type_impression):
     etage = fc.move(fc.move(forme,fc.Vector(x=Dx),True,Nx),fc.Vector(y=Dy),True,Ny) # Création de 1 étage de Nx*Ny pièces
 
     for i in range(Nz):
-        Z = i*Dz + 1
+        Z = i*Dz
         if i!=0:
-            liste.append(fc.ManualGcode(text=poudrage_z(Z,Nz,i)))
+            liste.append(fc.ManualGcode(text=poudrage_z(Z+Dz,Nz,i)))
         liste.extend(fc.move(etage,fc.Vector(z=Z),False))
 
     liste.append(fc.ManualGcode(text='M221 S100'))
