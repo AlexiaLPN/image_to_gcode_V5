@@ -57,7 +57,7 @@ def tartelette_contour_cv(image_cv, longueur, hauteur, pas, pas_bord, e_fond, e_
 
     # --- AJOUT : érosion pour garder une marge delta ---
     # delta est une distance dans les mêmes unités que tes coords → il faut convertir en "pixels" de ta matrice
-    delta = pas
+    delta = 10
     pixel_size = (x_coords.max() - x_coords.min()) / t_matrice_x  # taille d’un pixel en coord
     delta_pixels = int(delta / pixel_size)
     kernel = np.ones((delta_pixels, delta_pixels), np.uint8)
