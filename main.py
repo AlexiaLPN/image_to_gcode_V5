@@ -76,9 +76,10 @@ def tartelette_contour_cv(image_cv, longueur, hauteur, pas, pas_bord, e_fond, e_
             pointfinalfond = el
             break  
     pointinitialbord = fc.Point(x=x_coords[0],y=y_coords[0],z=0)
-    forme.extend(fc.travel_to(fc.Point(x=pointfinalfond.x, y=pointfinalfond.y, z=10)))
-    forme.extend(fc.travel_to(fc.Point(x=pointinitialbord.x, y=pointinitialbord.y, z=10)))
-    forme.extend(fc.travel_to(fc.Point(x=pointinitialbord.x, y=pointinitialbord.y, z=0)))
+    remplissage_fond.extend(fc.travel_to(fc.Point(x=pointfinalfond.x, y=pointfinalfond.y, z=10)))
+    remplissage_fond.extend(fc.travel_to(fc.Point(x=pointinitialbord.x, y=pointinitialbord.y, z=10)))
+    remplissage_fond.extend(fc.travel_to(fc.Point(x=pointinitialbord.x, y=pointinitialbord.y, z=0)))
+    
     remplissage_fond.append(fc.ManualGcode(text=f'M221 S20'))
     remplissage_fond.extend([fc.Point(x=x, y=y, z=0) for x, y in zip(x_coords, y_coords)])
     remplissage_fond.append(fc.ManualGcode(text=f'M221 S{e_fond}'))
