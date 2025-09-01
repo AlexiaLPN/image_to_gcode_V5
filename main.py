@@ -62,10 +62,10 @@ def tartelette_contour_cv(image_cv, longueur, hauteur, pas, pas_bord, e_fond, e_
     delta_pixels = max(1, int(delta / pixel_size))
     kernel = np.ones((delta_pixels, delta_pixels), np.uint8)
     binary_matrix = cv2.erode(binary_matrix, kernel, iterations=1)
-    binary_img = (binary_matrix * 255).astype(np.uint8)
+    binary_img = (binary_matrix.astype(np.uint8)) * 255
     binary_eroded = cv2.erode(binary_img, kernel, iterations=1)
     binary_matrix = (binary_eroded > 0).astype(np.uint8)
-    
+
     ### 3. Remplissage fond (lignes verticales) ###
     remplissage_fond = []
     for j in range(0, t_matrice_x, 1): # (0, t_matrice_x, 3)
