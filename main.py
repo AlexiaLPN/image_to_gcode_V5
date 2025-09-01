@@ -56,7 +56,7 @@ def tartelette_contour_cv(image_cv, longueur, hauteur, pas, pas_bord, e_fond, e_
     # --- Construction matrice binaire avec marge delta ---
     binary_matrix = np.zeros((t_matrice_y, t_matrice_x), dtype=np.uint8)
 
-    delta = 5
+    delta = pas
     binary_matrix = np.zeros((t_matrice_y, t_matrice_x), dtype=np.uint8)
 
     for idx, (gx, gy) in enumerate(grid_points):
@@ -65,11 +65,6 @@ def tartelette_contour_cv(image_cv, longueur, hauteur, pas, pas_bord, e_fond, e_
             i = idx // t_matrice_x
             j = idx % t_matrice_x
             binary_matrix[i, j] = 1
-
-    """contour_path = Path(np.column_stack((x_coords, y_coords)))
-    mask = contour_path.contains_points(grid_points)
-    binary_matrix = mask.reshape(t_matrice_y, t_matrice_x).astype(int)"""
-
 
     ### 3. Remplissage fond (lignes verticales) ###
     remplissage_fond = []
