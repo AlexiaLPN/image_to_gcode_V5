@@ -56,7 +56,7 @@ def tartelette_contour_cv(image_cv, longueur, hauteur, pas, pas_bord, e_fond, e_
     # --- Construction matrice binaire avec marge delta ---
     binary_matrix = np.zeros((t_matrice_y, t_matrice_x), dtype=np.uint8)
 
-    delta = pas
+    delta = 1
     binary_matrix = np.zeros((t_matrice_y, t_matrice_x), dtype=np.uint8)
 
     for idx, (gx, gy) in enumerate(grid_points):
