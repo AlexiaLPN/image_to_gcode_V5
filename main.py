@@ -41,6 +41,7 @@ def tartelette_contour_cv(image_cv, longueur, hauteur, pas, pas_bord, e_fond, e_
     # retournement de l'image car c'était à l'envers
     max_y = np.max(y_coords)
     y_coords = max_y - y_coords
+    fruit_contour_transformed = np.column_stack((x_coords, y_coords)).astype(np.int32)
 
     ### 2. Matrice binaire alignée avec le contour ###
     t_matrice_x = round(longueur / pas * 1) #(longueur / pas * 3)
@@ -56,10 +57,11 @@ def tartelette_contour_cv(image_cv, longueur, hauteur, pas, pas_bord, e_fond, e_
     binary_matrix = np.zeros((t_matrice_y, t_matrice_x), dtype=np.uint8)
 
     delta = 5
+    binary_matrix = np.zeros((t_matrice_y, t_matrice_x), dtype=np.uint8)
+
     for idx, (gx, gy) in enumerate(grid_points):
-        # distance signée au contour : >0 = dedans, <0 = dehors
-        dist = cv2.pointPolygonTest(fruit_contour, (gx/scale + min_x, (max_y - gy)/scale + min_y), True)
-        if dist > delta:  # seulement si le point est à plus de delta du bord
+        dist = cv2.pointPolygonTest(fruit_contour_transformed, (gx, gy), True)
+        if dist > delta:
             i = idx // t_matrice_x
             j = idx % t_matrice_x
             binary_matrix[i, j] = 1
