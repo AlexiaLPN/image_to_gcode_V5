@@ -59,7 +59,7 @@ def tartelette_contour_cv(image_cv, longueur, hauteur, pas, pas_bord, e_fond, e_
     # delta est une distance dans les mêmes unités que tes coords → il faut convertir en "pixels" de ta matrice
     delta = pas
     pixel_size = (x_coords.max() - x_coords.min()) / t_matrice_x  # taille d’un pixel en coord
-    delta_pixels = max(1, int(delta / pixel_size))
+    delta_pixels = int(delta / pixel_size)
     kernel = np.ones((delta_pixels, delta_pixels), np.uint8)
     binary_matrix = cv2.erode(binary_matrix, kernel, iterations=1)
 
