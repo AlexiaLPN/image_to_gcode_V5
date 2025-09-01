@@ -11,7 +11,6 @@ from fullcontrol.visualize.plot_data import PlotData
 from fullcontrol.visualize.state import State
 from fullcontrol.visualize.controls import PlotControls
 from fullcontrol.visualize.plotly import plot
-from matplotlib.path import Path
 
 # Motifs bords:
 
@@ -51,17 +50,10 @@ def tartelette_contour_cv(image_cv, longueur, hauteur, pas, pas_bord, e_fond, e_
     xv, yv = np.meshgrid(xs, ys)
     grid_points = np.column_stack((xv.ravel(), yv.ravel()))
 
+    from matplotlib.path import Path
     contour_path = Path(np.column_stack((x_coords, y_coords)))
     mask = contour_path.contains_points(grid_points)
     binary_matrix = mask.reshape(t_matrice_y, t_matrice_x).astype(int)
-
-    # --- AJOUT : érosion pour garder une marge delta ---
-    # delta est une distance dans les mêmes unités que tes coords → il faut convertir en "pixels" de ta matrice
-    delta = pas
-    pixel_size = (x_coords.max() - x_coords.min()) / t_matrice_x  # taille d’un pixel en coord
-    delta_pixels = max(1, int(delta / pixel_size))
-    kernel = np.ones((delta_pixels, delta_pixels), np.uint8)
-    binary_matrix = cv2.erode(binary_matrix, kernel, iterations=1)
 
     ### 3. Remplissage fond (lignes verticales) ###
     remplissage_fond = []
@@ -87,7 +79,7 @@ def tartelette_contour_cv(image_cv, longueur, hauteur, pas, pas_bord, e_fond, e_
     remplissage_fond.extend(fc.travel_to(fc.Point(x=pointfinalfond.x, y=pointfinalfond.y, z=10)))
     remplissage_fond.extend(fc.travel_to(fc.Point(x=pointinitialbord.x, y=pointinitialbord.y, z=10)))
     remplissage_fond.extend(fc.travel_to(fc.Point(x=pointinitialbord.x, y=pointinitialbord.y, z=0)))
-
+    
     remplissage_fond.append(fc.ManualGcode(text=f'M221 S20'))
     remplissage_fond.extend([fc.Point(x=x, y=y, z=0) for x, y in zip(x_coords, y_coords)])
     remplissage_fond.append(fc.ManualGcode(text=f'M221 S{e_fond}'))
