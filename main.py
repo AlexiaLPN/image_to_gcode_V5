@@ -70,10 +70,19 @@ def tartelette_contour_cv(image_cv, longueur, hauteur, pas, pas_bord, e_fond, e_
                 dehors = False
             else:
                 dehors = True
+
+    for el in remplissage_fond[::-1]:
+        if isinstance(el, fc.Point):
+            pointfinalfond = el
+            break  
+    pointinitialbord = fc.Point(x=x_coords[0],y=y_coords[0],z=0)
+    forme.extend(fc.travel_to(fc.Point(x=pointfinalfond.x, y=pointfinalfond.y, z=10)))
+    forme.extend(fc.travel_to(fc.Point(x=pointinitialbord.x, y=pointinitialbord.y, z=10)))
+    forme.extend(fc.travel_to(fc.Point(x=pointinitialbord.x, y=pointinitialbord.y, z=0)))
     remplissage_fond.append(fc.ManualGcode(text=f'M221 S20'))
     remplissage_fond.extend([fc.Point(x=x, y=y, z=0) for x, y in zip(x_coords, y_coords)])
     remplissage_fond.append(fc.ManualGcode(text=f'M221 S{e_fond}'))
-    
+
     ### 4. Bord vertical ###
     contour_pts = [fc.Point(x=x, y=y, z=0) for x, y in zip(x_coords, y_coords)]
     bord = []
@@ -129,16 +138,6 @@ def tartelette_contour_cv(image_cv, longueur, hauteur, pas, pas_bord, e_fond, e_
     forme.append(fc.ManualGcode(text=f'M221 S{e_fond}'))
     forme.append(fc.ManualGcode(text=f'M220 S{v_fond}'))
     forme.extend(remplissage_fond)
-
-    if remplissage_fond:
-        last_fill = remplissage_fond[-2]
-        for el in bord:
-            if isinstance(el, fc.Point):
-                pointinitialbord = el
-                break
-        forme.extend(fc.travel_to(fc.Point(x=last_fill.x, y=last_fill.y, z=10)))
-        forme.extend(fc.travel_to(fc.Point(x=pointinitialbord.x, y=pointinitialbord.y, z=10)))
-        forme.extend(fc.travel_to(fc.Point(x=pointinitialbord.x, y=pointinitialbord.y, z=0)))
 
     forme.append(fc.ManualGcode(text=f'M221 S{e_bord}'))
     forme.append(fc.ManualGcode(text=f'M220 S{v_bord}'))
