@@ -24,7 +24,8 @@ def tartelette_contour_cv(image_cv, longueur, hauteur, pas, pas_bord, e_fond, e_
     if not contours:
         return []
     fruit_contour = max(contours, key=cv2.contourArea)
-    epsilon = 0.5
+    nb_pts = 2000
+    epsilon = 1/nb_pts * cv2.arcLength(fruit_contour, True) 
     fruit_contour = cv2.approxPolyDP(fruit_contour, epsilon, True)
     coords = np.array([pt[0] for pt in fruit_contour])
 
@@ -56,7 +57,7 @@ def tartelette_contour_cv(image_cv, longueur, hauteur, pas, pas_bord, e_fond, e_
     # --- Construction matrice binaire avec marge delta ---
     binary_matrix = np.zeros((t_matrice_y, t_matrice_x), dtype=np.uint8)
 
-    delta = 1
+    delta = 0.7
     binary_matrix = np.zeros((t_matrice_y, t_matrice_x), dtype=np.uint8)
 
     for idx, (gx, gy) in enumerate(grid_points):
@@ -180,7 +181,7 @@ def tartelette_contour_cv(image_cv, longueur, hauteur, pas, pas_bord, e_fond, e_
     for el in forme:
         if isinstance(el, fc.Point):
             el.x += -1
-            el.y += -30
+            el.y += -26
             el.z += 1
 
     return forme, maxX, maxY, maxZ
@@ -389,12 +390,17 @@ hauteur = st.text_input("📐 Hauteur du bord (mm)", value="20")
 type_bord = st.selectbox("🎨 Type de bord :", ["Bord plein", "Dentelle petites mailles", "Dentelle maille haute"])
 type_impression = st.selectbox("🍰 Appareil et poudre utilisés :", [
     "Poudre blé luxe et appareil sucré luxe",
-    "Poudre blé luxe et appareil salé",
     "Poudre blé luxe et appareil vegan",
-    "Poudre sans gluten et appareil sans gluten",
-    "Poudre blé cacao et appareil sucré luxe",
-    "Poudre de macaron et appareil macaron"
+    "Poudre sans gluten et appareil sans gluten"
 ])
+# [
+    #"Poudre blé luxe et appareil sucré luxe",
+    #"Poudre blé luxe et appareil salé",
+    #"Poudre blé luxe et appareil vegan",
+    #"Poudre sans gluten et appareil sans gluten",
+    #"Poudre blé cacao et appareil sucré luxe",
+    #"Poudre de macaron et appareil macaron"
+#]
 
 
 if st.button("Générer et visualiser le GCODE"):
