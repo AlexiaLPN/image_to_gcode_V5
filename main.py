@@ -385,8 +385,8 @@ st.markdown(
 )
 
 image_upload = st.file_uploader("Envoyez une image .jpg, .jpeg ou .png (fond blanc, forme noire)", type=["jpg", "jpeg","png"])
-longueur = st.text_input("📏 Longueur (=dimension maximale) de la tartelette (mm)", value="100")-1.6
-hauteur = st.text_input("📐 Hauteur du bord (mm)", value="20")-2
+longueur = st.text_input("📏 Longueur (=dimension maximale) de la tartelette (mm)", value="100")
+hauteur = st.text_input("📐 Hauteur du bord (mm)", value="20")
 type_bord = st.selectbox("🎨 Type de bord :", ["Bord plein", "Dentelle petites mailles", "Dentelle maille haute"])
 type_impression = st.selectbox("🍰 Appareil et poudre utilisés :", [
     "Poudre blé luxe et appareil sucré luxe",
@@ -409,8 +409,8 @@ if st.button("Générer et visualiser le GCODE"):
     else:
         try:
             # Convertir longueur et hauteur en float
-            longueur_num = float(longueur)
-            hauteur_num = float(hauteur)
+            longueur_num = float(longueur)-1.6
+            hauteur_num = float(hauteur)-2
 
             gcode, forme, nombre_de_pieces, poudre, appareil = generer_gcode(image_upload, longueur_num, hauteur_num, type_bord, type_impression)
 
