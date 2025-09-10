@@ -388,7 +388,7 @@ image_upload = st.file_uploader("Envoyez une image .jpg, .jpeg ou .png (fond bla
 longueur = st.text_input("📏 Longueur (=dimension maximale) de la tartelette (mm)", value="100")
 hauteur = st.text_input("📐 Hauteur du bord (mm)", value="20")
 type_bord = st.selectbox("🎨 Type de bord :", ["Bord plein", "Dentelle petites mailles", "Dentelle maille haute"])
-type_impression = st.selectbox("🍰 Appareil et poudre utilisés :", [
+type_impression = st.selectbox("🍰 Appareil et poudre utilisés : (Autres recettes disponibles prochainement !)", [
     "Poudre blé luxe et appareil sucré luxe",
     "Poudre blé luxe et appareil vegan",
     "Poudre sans gluten et appareil sans gluten"
