@@ -63,7 +63,7 @@ G1 Y120.0 F10000.0
 G1 X15.0 F10000.0
 ; ------ End Deplacement hauteur snippet
 M400 
-M42 P3 S0.25
+M42 P3 S0.2
 G92 U0 V0 W0 A0
 G1 V200.0 A300.0 F3000.0
 G92 U0 V0 W0 A0
@@ -83,7 +83,7 @@ G1 Y120.0 F10000.0
 G1 X15.0 F10000.0
 ; ------ End Deplacement hauteur snippet
 M400 
-M42 P3 S0.25
+M42 P3 S0.2
 G92 U0 V0 W0 A0
 G1 V200.0 A300.0 F3000.0
 G92 U0 V0 W0 A0
@@ -103,7 +103,7 @@ G1 Y120.0 F10000.0
 G1 X15.0 F10000.0
 ; ------ End Deplacement hauteur snippet
 M400 
-M42 P3 S0.25
+M42 P3 S0.2
 G92 U0 V0 W0 A0
 G1 V200.0 A300.0 F3000.0
 G92 U0 V0 W0 A0
@@ -130,7 +130,7 @@ G1 Z-80.0
 M400 
 G92 U0 V0 W0 A20;
 M400
-M42 P3 S0.25
+M42 P3 S0.2
 G1 U2900 V4567.5 W362.5 A6700 F3000
 ; ------ After powdering snippet
 M400 ;    		     Tempo
