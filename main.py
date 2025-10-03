@@ -4,7 +4,10 @@ import lab.fullcontrol as fclab
 from math import *
 import numpy as np
 from Configs import configMonstre2mm
-from SequencePoudrage import *
+from SequencePoudrage import poudrage_initial as poudrage_initial_A
+from SequencePoudrageB import poudrage_initialB as poudrage_initial_B
+from SequencePoudrage import poudrage_z as poudrage_z_A
+from SequencePoudrageB import poudrage_zB as poudrage_z_B
 from motifs_bords import *
 import cv2
 from fullcontrol.visualize.plot_data import PlotData
@@ -186,7 +189,7 @@ def tartelette_contour_cv(image_cv, longueur, hauteur, pas, pas_bord, e_fond, e_
 
     return forme, maxX, maxY, maxZ
     
-def generer_gcode(image_bytes, longueur, hauteur, type_bord, type_impression):
+def generer_gcode(image_bytes, longueur, hauteur, type_bord, type_impression, numero_imprimante):
     pas = 1.5 # pas pour le fond
     pas_bord = 1.5 # pas pour le bord
     if type_impression == "Poudre blé luxe et appareil sucré luxe":
@@ -197,9 +200,11 @@ def generer_gcode(image_bytes, longueur, hauteur, type_bord, type_impression):
         poudre = 'BL'
         appareil = 'SUC'
     elif type_impression == "Poudre blé luxe et appareil salé":
-        e_fond = 50 # multiplicateur d'extrusion 
+        pas = 1 # pas pour le fond
+        pas_bord = 1.3 # pas pour le bord
+        e_fond = 70 # multiplicateur d'extrusion 
         v_fond = 100 # vitesse d'impression
-        e_bord = 50 # multiplicateur d'extrusion 
+        e_bord = 75 # multiplicateur d'extrusion 
         v_bord = 100 # vitesse d'impression
         poudre = 'BL'
         appareil = 'SAL'
@@ -236,7 +241,10 @@ def generer_gcode(image_bytes, longueur, hauteur, type_bord, type_impression):
     liste.append(fc.ManualGcode(text=';PARAMÈTRES UTILISÉS :'))
     liste.append(fc.ManualGcode(text='G28'))
     liste.append(fc.ManualGcode(text='M42 P5 S1'))
-    liste.append(fc.ManualGcode(text=poudrage_initial()))
+    if numero_imprimante <= 22:
+        liste.append(fc.ManualGcode(text=poudrage_initial_A()))
+    else :
+        liste.append(fc.ManualGcode(text=poudrage_initial_B()))
 
     # Lire l'image depuis les bytes
     file_bytes = np.asarray(bytearray(image_bytes.read()), dtype=np.uint8)
@@ -295,8 +303,8 @@ def generer_gcode(image_bytes, longueur, hauteur, type_bord, type_impression):
     Nx2 = 0 # Nombre de pièces sur l'axe x
     Ny2 = 0 # Nombre de pièces sur l'axe y
     Nz2 = 0 # Nombre de pièces sur l'axe z
-    dimX = -5
-    dimY = -30
+    dimX = 0
+    dimY = -25
     dimZ = 1
     if dimX + maxY <= 235 and dimY + maxX <= 146 and dimZ + maxZ <= 100: # on vérifie que la pièce passe dans le bac
         Nx2 += 1
@@ -332,7 +340,10 @@ def generer_gcode(image_bytes, longueur, hauteur, type_bord, type_impression):
     for i in range(Nz):
         Z = i*Dz
         if i!=0:
-            liste.append(fc.ManualGcode(text=poudrage_z(Z+Dz,Nz,i)))
+            if numero_imprimante <= 22:
+                liste.append(fc.ManualGcode(text=poudrage_z_A(Z+Dz,Nz,i)))
+            else :
+                liste.append(fc.ManualGcode(text=poudrage_z_B(Z+Dz,Nz,i)))
         liste.extend(fc.move(etage,fc.Vector(z=Z),False))
 
     liste.append(fc.ManualGcode(text='M221 S100'))
@@ -340,10 +351,18 @@ def generer_gcode(image_bytes, longueur, hauteur, type_bord, type_impression):
     liste.append(fc.ManualGcode(text='M400'))
     liste.append(fc.ManualGcode(text='M42 P3 S0'))
     liste.append(fc.ManualGcode(text='M42 P5 S0'))
-    liste.append(fc.ManualGcode(text='G1 Z155'))
+    if numero_imprimante>=23:
+        liste.append(fc.ManualGcode(text='G28 Z'))
+        liste.append(fc.ManualGcode(text='G28 X'))
+        liste.append(fc.ManualGcode(text='G28 Y'))
+    if numero_imprimante<=22:
+        liste.append(fc.ManualGcode(text='G1 Z155'))
     liste.append(fc.ManualGcode(text='G1 Y-10 F5000'))
     liste.append(fc.ManualGcode(text='G1 X380 F5000'))
-    liste.append(fc.ManualGcode(text='G0 Z100 F8000'))
+    if numero_imprimante>=23:
+        liste.append(fc.ManualGcode(text='G0 Z80 F8000'))
+    if numero_imprimante<=22:
+        liste.append(fc.ManualGcode(text='G0 Z100 F8000'))
     
     
     return configMonstre2mm.getGcode(liste), liste, Nx*Ny*Nz, poudre, appareil
@@ -413,7 +432,8 @@ type_bord = st.selectbox("🎨 Type de bord :", ["Bord plein", "Dentelle petites
 type_impression = st.selectbox("🍰 Appareil et poudre utilisés : (Autres recettes disponibles prochainement !)", [
     "Poudre blé luxe et appareil sucré luxe",
     "Poudre blé luxe et appareil vegan",
-    "Poudre sans gluten et appareil sans gluten"
+    "Poudre sans gluten et appareil sans gluten",
+    "Poudre blé luxe et appareil salé"
 ])
 # [
     #"Poudre blé luxe et appareil sucré luxe",
@@ -423,6 +443,7 @@ type_impression = st.selectbox("🍰 Appareil et poudre utilisés : (Autres rece
     #"Poudre blé cacao et appareil sucré luxe",
     #"Poudre de macaron et appareil macaron"
 #]
+num_imprimante = st.text_input("🖨️ Numéro de l'imprimante :")
 
 
 if st.button("Générer et visualiser le GCODE"):
@@ -433,8 +454,9 @@ if st.button("Générer et visualiser le GCODE"):
             # Convertir longueur et hauteur en float
             longueur_num = float(longueur)-1.6
             hauteur_num = float(hauteur)-2
+            numero_imprimante = int(num_imprimante)
 
-            gcode, forme, nombre_de_pieces, poudre, appareil = generer_gcode(image_upload, longueur_num, hauteur_num, type_bord, type_impression)
+            gcode, forme, nombre_de_pieces, poudre, appareil = generer_gcode(image_upload, longueur_num, hauteur_num, type_bord, type_impression,numero_imprimante)
 
             if gcode == 0:
                 st.warning("Veuillez choisir des dimensions plus petites, la taille maximale est longueur: 236mm, largeur: 176mm, hauteur: 99mm")
