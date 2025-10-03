@@ -476,7 +476,10 @@ if st.button("Générer et visualiser le GCODE"):
                 fig = plot(plot_data, plot_controls)
                 st.plotly_chart(fig, use_container_width=True)
 
-                output_file = f"TARTE-{poudre}-{appareil}-C12-T2-H15B12-{nombre_de_pieces}.gcode"
+                if numero_imprimante<=22:
+                    output_file = f"TARTE-{poudre}-{appareil}-C12-T2-H15B12-{nombre_de_pieces}-O-A.gcode"
+                else:
+                    output_file = f"TARTE-{poudre}-{appareil}-C12-T2-H15B12-{nombre_de_pieces}-O-B.gcode"
 
                 # Bouton téléchargement
                 st.download_button("💾 Télécharger le GCODE", gcode, file_name=output_file)
