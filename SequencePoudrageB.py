@@ -193,7 +193,7 @@ G1 X380.0 F5000.0
 ; ------ End deplacement normal snippet
 G1 Z-20.0
 M400 
-M42 P3 S0.04
+M42 P3 S0.2
 G92 U0 V0 W0 A0
 G1 V200.0 A300.0 F1000.0
 G92 U0 V0 W0 A0

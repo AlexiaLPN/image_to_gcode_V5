@@ -120,7 +120,8 @@ M42 P5 S1"""
 
 def poudrage_initial ():
 
-    gCode_poudrage_initial = """ 
+    gCode_poudrage_initial = """
+G92 X0 Y0 Z5
 ; DEBUT DU POUDRAGE INITIAL ALEXANDRE
 ; ------ Mise en position de securite
 G1 Y-40.0 F10000.0

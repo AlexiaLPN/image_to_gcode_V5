@@ -30,7 +30,7 @@ def getInit():
     gcode_controls = GcodeControls(printer_name='custom', initialization_data=initialization_data)
     starting_procedure_steps = []
     #starting_procedure_steps.append(ManualGcode(text="M42 P5 S1"))
-    starting_procedure_steps.append(ManualGcode(text="G92 X0 Y0 Z5"))
+    #starting_procedure_steps.append(ManualGcode(text="G92 X0 Y0 Z5"))
     #starting_procedure_steps.append(ManualGcode(text="M42 P3 S0.2"))
     starting_procedure_steps.append(PrinterCommand(id='absolute_coords'))
     starting_procedure_steps.append(PrinterCommand(id='units_mm'))
@@ -40,7 +40,7 @@ def getInit():
     #starting_procedure_steps.append(ManualGcode(
     #    text='M221 S' + str(initialization_data["material_flow_percent"])+' ; set extrude factor override percentage'))
     starting_procedure_steps.append(Extruder(on=False))
-    starting_procedure_steps.append(Point(x=0, y=0, z=5))
+    #starting_procedure_steps.append(Point(x=0, y=0, z=5))
     starting_procedure_steps.append(Extruder(on=True))
     starting_procedure_steps.append(ManualGcode(text=';-----\n; END OF STARTING PROCEDURE\n;-----\n'))
 
@@ -51,7 +51,7 @@ def getInit():
     ending_procedure_steps = []
     ending_procedure_steps.append(ManualGcode(text='\n;-----\n; START OF ENDING PROCEDURE\n;-----'))
     ending_procedure_steps.append(ManualGcode(text='G91 ; relative coordinates'))
-    ending_procedure_steps.append(ManualGcode(text='G0 Z20 F8000 ; drop bed'))
+    #ending_procedure_steps.append(ManualGcode(text='G0 Z20 F8000 ; drop bed'))
     ending_procedure_steps.append(ManualGcode(text='G90 ; absolute coordinates'))
     ending_procedure_steps.append(ManualGcode(text='M42 P5 S0; pump off'))
     ending_procedure_steps.append(Fan(speed_percent=0))
